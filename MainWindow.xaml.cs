@@ -15,28 +15,17 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>. */
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.IO;
 using System.Diagnostics;
-using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Interop;
-using System.ComponentModel;
 using System.Xml.Linq;
 using System.IO.Pipes;
-using System.Management.Automation;
-using System.Collections.ObjectModel;
 
 namespace ClipboardAccelerator
 {
@@ -86,7 +75,9 @@ namespace ClipboardAccelerator
         public MainWindow()
         {
             // TODO: Implement a "semaphore" or "lock" to prevent a second start in the below function
-            CheckIfAlreadyRunning(); 
+            CheckIfAlreadyRunning();
+
+			SetupAppFolder();
 
             InitializeComponent();            
 
@@ -98,14 +89,41 @@ namespace ClipboardAccelerator
             Closing += MainWindow_Closing;
         }
 
+		/// <summary>
+		/// Creates a given folder if it does not exist
+		/// </summary>
+		/// <param name="name">Absolute path to the directory to create</param>
+		/// <returns>If the directory was newly created and did not exist yet</returns>
+		bool CreateFolderIfNecessary(string name)
+		{
+			if (!Directory.Exists(name))
+			{
+				Directory.CreateDirectory(name);
+				return true;
+			}
+			return false;
+		}
+
+		void SetupAppFolder() {
+			CreateFolderIfNecessary(Constants.APPLICATION_DATA_PATH);
+			if (CreateFolderIfNecessary(Constants.APPLICATION_CONFIG_PATH))
+			{
+				// TODO Setup config files
+			}
+			if (CreateFolderIfNecessary(Constants.APPLICATION_TOOLS_PATH))
+			{
+				// TODO Setup example files
+				// File.Copy("", $"{Constants.APPLICATION_TOOLS_PATH}");
+			}
+		}
 
 
         void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if(!bTestingCloseFlag)
             {
-                MessageBoxResult result = MessageBox.Show("Are you sure you want to close Clipboard Accelerator?",
-                                                          "Clipboard Accelerator",
+                MessageBoxResult result = MessageBox.Show("Are you sure you want to close "+Constants.APPLICATION_NAME,
+                                                          Constants.APPLICATION_NAME,
                                                           MessageBoxButton.YesNo,
                                                           MessageBoxImage.Question);
                 if (result == MessageBoxResult.No)
@@ -136,7 +154,7 @@ namespace ClipboardAccelerator
             else
             {
                 MessageBox.Show("Failed to add clipboard hook. The program will not be able to catch clipboard updates.",
-                                                          "Clipboard Accelerator",
+														  Constants.APPLICATION_NAME,
                                                           MessageBoxButton.OK,
                                                           MessageBoxImage.Warning);
             }            
@@ -230,7 +248,7 @@ namespace ClipboardAccelerator
             {
                 case ".xml":
                     // Get the path to the selected file
-                    string sXmlBatFile = AppDomain.CurrentDomain.BaseDirectory + @"Tools\" + (listBoxCommands.SelectedItem as FileItem).FileName + (listBoxCommands.SelectedItem as FileItem).FileExt;
+                    string sXmlBatFile = Constants.APPLICATION_TOOLS_PATH + (listBoxCommands.SelectedItem as FileItem).FileName + (listBoxCommands.SelectedItem as FileItem).FileExt;
 
                     XMLRecord xrec = new XMLRecord(sXmlBatFile);   
 
@@ -386,7 +404,7 @@ namespace ClipboardAccelerator
             // Do nothing if no ListBox item was selected
             if (listBoxCommands.SelectedItem == null) { return; }
 
-            string sXmlBatFile = AppDomain.CurrentDomain.BaseDirectory + @"Tools\" + (listBoxCommands.SelectedItem as FileItem).FileName + (listBoxCommands.SelectedItem as FileItem).FileExt;            
+            string sXmlBatFile = Constants.APPLICATION_TOOLS_PATH + (listBoxCommands.SelectedItem as FileItem).FileName + (listBoxCommands.SelectedItem as FileItem).FileExt;            
 
 
             // TODO: check if it makes sense to make the below "if" a switch statement - e.g. to reduce code duplicates
@@ -496,7 +514,7 @@ namespace ClipboardAccelerator
         // Pupulate or update the "FileItems" list with the details of the files and the XML content
         private int GetTools()
         {
-            String ExePath = AppDomain.CurrentDomain.BaseDirectory + "Tools";
+			string ExePath = Constants.APPLICATION_TOOLS_PATH;
 
             // Clear the "FileItems" list to have no duplicates, e.g. if called a second time to refresh the files in the Tools directory
             FileItems.Clear();
@@ -525,7 +543,7 @@ namespace ClipboardAccelerator
             {
                 if (fitem.FileExt.ToLower() == ".xml")
                 {
-                    string sXmlFile = AppDomain.CurrentDomain.BaseDirectory + @"Tools\" + fitem.FileName + fitem.FileExt;
+                    string sXmlFile = Constants.APPLICATION_TOOLS_PATH + fitem.FileName + fitem.FileExt;
 
                     // Read the XML file
                     // Source: http://stackoverflow.com/questions/5604330/xml-parsing-read-a-simple-xml-file-and-retrieve-values
@@ -683,7 +701,7 @@ namespace ClipboardAccelerator
         {
             try
             {
-                Process.Start(AppDomain.CurrentDomain.BaseDirectory + @"Tools\");
+                Process.Start(Constants.APPLICATION_TOOLS_PATH);
             }
             catch (Exception ex)
             {
@@ -758,7 +776,7 @@ namespace ClipboardAccelerator
         // Read the RegExps from the XML file and populate the "RegExpItems" list
         private int GetRegExConfig()
         {
-            string sRegExXmlFile = AppDomain.CurrentDomain.BaseDirectory + @"Config\RegEx.xml";
+            string sRegExXmlFile = Constants.APPLICATION_CONFIG_PATH + @"RegEx.xml";
 
             // Clear the RegExpItems list to not have duplicates
             RegExpItems.Clear();
@@ -880,7 +898,7 @@ namespace ClipboardAccelerator
             }    
 
             // Get the path to the selected file
-            string sXmlBatFile = AppDomain.CurrentDomain.BaseDirectory + @"Tools\" + (listBoxCommands.SelectedItem as FileItem).FileName + (listBoxCommands.SelectedItem as FileItem).FileExt;
+            string sXmlBatFile = Constants.APPLICATION_TOOLS_PATH + (listBoxCommands.SelectedItem as FileItem).FileName + (listBoxCommands.SelectedItem as FileItem).FileExt;
 
             // Init the optional arguments window
             OptionalArguments WndOptArguments = new OptionalArguments(sXmlBatFile);
@@ -951,5 +969,5 @@ namespace ClipboardAccelerator
         {
             Clipboard.SetText(tbClipboardContent.Text);
         }
-    }
+	}
 }

@@ -7,80 +7,80 @@
         mc:Ignorable="d"
         Title="Clipboard Accelerator" Height="400" Width="896" MinHeight="400" SizeChanged="Window_SizeChanged" MinWidth="896" StateChanged="Window_StateChanged"  >
 
-    <Grid Margin="0,0,0,0">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="xamlLeftColumn" Width="250" MinWidth="50" MaxWidth="250"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <GridSplitter Grid.Column="0" Width="3"/>
+	<Grid Margin="0,0,0,0">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition x:Name="xamlLeftColumn" Width="250" MinWidth="50" MaxWidth="250"/>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+		<GridSplitter Grid.Column="0" Width="3"/>
 
-        <ListBox x:Name="listBoxCommands" HorizontalContentAlignment="Stretch" Margin="10,10,8,10" FontSize="21.333" MouseDoubleClick="listBoxCommands_MouseDoubleClick" Initialized="listBoxCommands_Initialized" Background="White" Grid.Column="0" ScrollViewer.CanContentScroll="True" BorderThickness="1" FontWeight="Bold" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid Margin="0,2">
-                        <Grid.Background>
-                            <SolidColorBrush Color="{Binding ItemBackgroundColor}"/>
-                        </Grid.Background>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="1" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding FileName}" Foreground="{Binding ItemTextColor}" />
-                        <!-- (This XML tag inserts the file extension on column 2 of the listbox) <TextBlock Grid.Column="1" Text="{Binding FileExt}" /> -->
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-            <ListBox.ContextMenu>
-                <ContextMenu Name="lbContextMenu">
-                    <MenuItem Header="Browse Tools" Click="bBrowseToolsFolder_Click"></MenuItem>
-                    <MenuItem Header="Refresh Tools" Click="bRefreshTools_Click"></MenuItem>
-                </ContextMenu>
-            </ListBox.ContextMenu>
+		<ListBox x:Name="listBoxCommands" HorizontalContentAlignment="Stretch" Margin="10,10,8,10" FontSize="21.333" MouseDoubleClick="listBoxCommands_MouseDoubleClick" Initialized="listBoxCommands_Initialized" Background="White" Grid.Column="0" ScrollViewer.CanContentScroll="True" BorderThickness="1" FontWeight="Bold" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<Grid Margin="0,2">
+						<Grid.Background>
+							<SolidColorBrush Color="{Binding ItemBackgroundColor}"/>
+						</Grid.Background>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*" />
+							<ColumnDefinition Width="1" />
+						</Grid.ColumnDefinitions>
+						<TextBlock Text="{Binding FileName}" Foreground="{Binding ItemTextColor}" />
+						<!-- (This XML tag inserts the file extension on column 2 of the listbox) <TextBlock Grid.Column="1" Text="{Binding FileExt}" /> -->
+					</Grid>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+			<ListBox.ContextMenu>
+				<ContextMenu Name="lbContextMenu">
+					<MenuItem Header="Browse Tools" Click="bBrowseToolsFolder_Click"></MenuItem>
+					<MenuItem Header="Refresh Tools" Click="bRefreshTools_Click"></MenuItem>
+				</ContextMenu>
+			</ListBox.ContextMenu>
 
-            <!--Define context menu for the single listbox items. Source: http://stackoverflow.com/questions/9549231/how-to-right-click-on-item-from-listbox-and-open-menu-on-wpf -->
-            <ListBox.Resources>
-                <!--Defines a context menu-->
-                <ContextMenu x:Key="MyElementMenu">
-                    <MenuItem Header="Optional Arguments" Click="MenuItem_Click" />
-                    <MenuItem Header="Browse Tools" Click="bBrowseToolsFolder_Click"></MenuItem>
-                    <MenuItem Header="Refresh Tools" Click="bRefreshTools_Click"></MenuItem>
-                </ContextMenu>
+			<!--Define context menu for the single listbox items. Source: http://stackoverflow.com/questions/9549231/how-to-right-click-on-item-from-listbox-and-open-menu-on-wpf -->
+			<ListBox.Resources>
+				<!--Defines a context menu-->
+				<ContextMenu x:Key="MyElementMenu">
+					<MenuItem Header="Optional Arguments" Click="MenuItem_Click" />
+					<MenuItem Header="Browse Tools" Click="bBrowseToolsFolder_Click"></MenuItem>
+					<MenuItem Header="Refresh Tools" Click="bRefreshTools_Click"></MenuItem>
+				</ContextMenu>
 
-                <!--Sets a context menu for each ListBoxItem in the current ListBox-->
-                <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="ContextMenu" Value="{StaticResource MyElementMenu}"/>
-                </Style>
-            </ListBox.Resources>
+				<!--Sets a context menu for each ListBoxItem in the current ListBox-->
+				<Style TargetType="{x:Type ListBoxItem}">
+					<Setter Property="ContextMenu" Value="{StaticResource MyElementMenu}"/>
+				</Style>
+			</ListBox.Resources>
 
-        </ListBox>
+		</ListBox>
 
-        <TextBox x:Name="tbClipboardContent" Margin="10,211,10,38" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" FontSize="14.667" TextChanged="tbClipboardContent_TextChanged" Grid.Column="1"/>
-        <ComboBox x:Name="comboOptArg" Grid.Column="1" Margin="10,0,10,10" IsEditable="True" Height="22" VerticalAlignment="Bottom" ToolTip="Optional Arguments (supported only by XML files)"/>
+		<TextBox x:Name="tbClipboardContent" Margin="10,211,10,38" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" FontSize="14.667" TextChanged="tbClipboardContent_TextChanged" Grid.Column="1"/>
+		<ComboBox x:Name="comboOptArg" Grid.Column="1" Margin="10,0,10,10" IsEditable="True" Height="22" VerticalAlignment="Bottom" ToolTip="Optional Arguments (supported only by XML files)"/>
 
-        <Button x:Name="buttonRun" Content="Log" Margin="320,48,0,0" Click="buttonRun_Click" HorizontalAlignment="Left" Width="51" VerticalAlignment="Top" Grid.Column="1" />
-        <!-- Height="20" RenderTransformOrigin="1.471,0.4" -->
-        <Button x:Name="buttonAbout" Content="About" Margin="376,48,0,0" VerticalAlignment="Top" Click="buttonAbout_Click"  HorizontalAlignment="Left" Width="51" Grid.Column="1"/>
-        <!-- RenderTransformOrigin="-4.706,2.4" -->
+		<Button x:Name="buttonRun" Content="Log" Margin="320,48,0,0" Click="buttonRun_Click" HorizontalAlignment="Left" Width="51" VerticalAlignment="Top" Grid.Column="1" />
+		<!-- Height="20" RenderTransformOrigin="1.471,0.4" -->
+		<Button x:Name="buttonAbout" Content="About" Margin="376,48,0,0" VerticalAlignment="Top" Click="buttonAbout_Click"  HorizontalAlignment="Left" Width="51" Grid.Column="1"/>
+		<!-- RenderTransformOrigin="-4.706,2.4" -->
 
-        <GroupBox x:Name="groupBox" Header="Settings" Margin="10,10,10,0" VerticalAlignment="Top" Height="171" Grid.Column="1" BorderThickness="0,1,0,0"/>
-        <CheckBox x:Name="cBFirstLineOnly" Content="Execute first line only (ignore following lines)" HorizontalAlignment="Left" Margin="20,28,0,0" VerticalAlignment="Top" IsChecked="True" Grid.Column="1"/>
-        <CheckBox x:Name="cBNotifyExecution" Content="Notify before executing the command" HorizontalAlignment="Left" Margin="20,48,0,0" VerticalAlignment="Top" IsChecked="True" Grid.Column="1"/>
-        <CheckBox x:Name="cBIgnoreCBUpdate" Content="Ignore clipboard update" HorizontalAlignment="Left" Margin="20,68,0,0" VerticalAlignment="Top" Grid.Column="1"/>
-        <CheckBox x:Name="cBShowNW" Content="Show notification window when clipboard changes" HorizontalAlignment="Left" Margin="20,88,0,0" VerticalAlignment="Top" IsChecked="True" Grid.Column="1"/>
-        <CheckBox x:Name="cBHideClipboard" Content="Hide clipboard content box when clipboard changes (hide passwords)" HorizontalAlignment="Left" Margin="20,108,0,0" VerticalAlignment="Top" Grid.Column="1"/>
-        <CheckBox x:Name="cBCombineClipboard" Content="Combine captured clipboard text (disables clipboard history functionality)" HorizontalAlignment="Left" Margin="20,128,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+		<GroupBox x:Name="groupBox" Header="Settings" Margin="10,10,10,0" VerticalAlignment="Top" Height="171" Grid.Column="1" BorderThickness="0,1,0,0"/>
+		<CheckBox x:Name="cBFirstLineOnly" Content="Execute first line only (ignore following lines)" HorizontalAlignment="Left" Margin="20,28,0,0" VerticalAlignment="Top" IsChecked="True" Grid.Column="1"/>
+		<CheckBox x:Name="cBNotifyExecution" Content="Notify before executing the command" HorizontalAlignment="Left" Margin="20,48,0,0" VerticalAlignment="Top" IsChecked="True" Grid.Column="1"/>
+		<CheckBox x:Name="cBIgnoreCBUpdate" Content="Ignore clipboard update" HorizontalAlignment="Left" Margin="20,68,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+		<CheckBox x:Name="cBShowNW" Content="Show notification window when clipboard changes" HorizontalAlignment="Left" Margin="20,88,0,0" VerticalAlignment="Top" IsChecked="True" Grid.Column="1"/>
+		<CheckBox x:Name="cBHideClipboard" Content="Hide clipboard content box when clipboard changes (hide passwords)" HorizontalAlignment="Left" Margin="20,108,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+		<CheckBox x:Name="cBCombineClipboard" Content="Combine captured clipboard text (disables clipboard history functionality)" HorizontalAlignment="Left" Margin="20,128,0,0" VerticalAlignment="Top" Grid.Column="1"/>
 
-        <Button x:Name="bNext" Content="&gt;" Margin="44,186,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="34" Click="bNext_Click" IsEnabled="False" Grid.Column="1" ToolTip="Go forward"/>
-        <Button x:Name="bPrev" Content="&lt;" HorizontalAlignment="Left" Margin="10,186,0,0" VerticalAlignment="Top" Width="34" Click="bPrev_Click" IsEnabled="False" Grid.Column="1" ToolTip="Go back"/>
-        <Button x:Name="bDeleteClipboardEntry" Content="Delete" HorizontalAlignment="Left" Margin="83,186,0,0" VerticalAlignment="Top" Width="48" Click="bDeleteClipboardEntry_Click" IsEnabled="False" Grid.Column="1" ToolTip="Delete the currently visible saved clipboard"/>
-        <Button x:Name="bToClipboard" Content="Copy" Grid.Column="1" HorizontalAlignment="Left" Margin="136,186,0,0" VerticalAlignment="Top" Width="45" Click="bToClipboard_Click" ToolTip="Copy the currently visible clipboard"/>
+		<Button x:Name="bNext" Content="&gt;" Margin="44,186,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="34" Click="bNext_Click" IsEnabled="False" Grid.Column="1" ToolTip="Go forward"/>
+		<Button x:Name="bPrev" Content="&lt;" HorizontalAlignment="Left" Margin="10,186,0,0" VerticalAlignment="Top" Width="34" Click="bPrev_Click" IsEnabled="False" Grid.Column="1" ToolTip="Go back"/>
+		<Button x:Name="bDeleteClipboardEntry" Content="Delete" HorizontalAlignment="Left" Margin="83,186,0,0" VerticalAlignment="Top" Width="48" Click="bDeleteClipboardEntry_Click" IsEnabled="False" Grid.Column="1" ToolTip="Delete the currently visible saved clipboard"/>
+		<Button x:Name="bToClipboard" Content="Copy" Grid.Column="1" HorizontalAlignment="Left" Margin="136,186,0,0" VerticalAlignment="Top" Width="45" Click="bToClipboard_Click" ToolTip="Copy the currently visible clipboard"/>
 
-        <Button x:Name="bShowClipboard" Content="Click to show clipboard" Margin="10,211,10,38" Visibility="Hidden" Click="bShowClipboard_Click" Grid.Column="1"/>
+		<Button x:Name="bShowClipboard" Content="Click to show clipboard" Margin="10,211,10,38" Visibility="Hidden" Click="bShowClipboard_Click" Grid.Column="1"/>
 
-        <TextBlock x:Name="tBCBInfoLine" Grid.Column="1" HorizontalAlignment="Left" Margin="189,188,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="198"/>
-        <TextBlock x:Name="tBCBInfoTime" Grid.Column="1" Margin="0,188,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="86" TextAlignment="Right"/>
+		<TextBlock x:Name="tBCBInfoLine" Grid.Column="1" HorizontalAlignment="Left" Margin="189,188,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="198"/>
+		<TextBlock x:Name="tBCBInfoTime" Grid.Column="1" Margin="0,188,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="86" TextAlignment="Right"/>
 
-        <!--     The old expander 
+		<!--     The old expander 
         <Expander x:Name="expanderMoreSettings" Grid.Column="1" Header="More Settings" HorizontalAlignment="Left" Margin="20,148,0,0" Width="297" Height="122" VerticalAlignment="Top" Expanded="expanderMoreSettings_Expanded" Panel.ZIndex="-1" Collapsed="expanderMoreSettings_Collapsed">
             <Grid Background="White">
                 <Border BorderBrush="LightGray" BorderThickness="1" Height="89" />
@@ -89,8 +89,8 @@
         </Expander>
         -->
 
-        <Button x:Name="bMoreSettings" Content="Advanced Settings" Grid.Column="1" HorizontalAlignment="Left" Margin="320,23,0,0" VerticalAlignment="Top" Width="107" Click="bMoreSettings_Click"/>
+		<Button x:Name="bMoreSettings" Content="Advanced Settings" Grid.Column="1" HorizontalAlignment="Left" Margin="320,23,0,0" VerticalAlignment="Top" Width="107" Click="bMoreSettings_Click"/>
 
 
-    </Grid>
+	</Grid>
 </Window>

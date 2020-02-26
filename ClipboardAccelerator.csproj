@@ -99,6 +99,7 @@
     </ApplicationDefinition>
     <Compile Include="ClipboardEntry.cs" />
     <Compile Include="ClipboardHook.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="StartupNotificationWindow.xaml.cs">
       <DependentUpon>StartupNotificationWindow.xaml</DependentUpon>
     </Compile>
@@ -206,7 +207,9 @@
   <ItemGroup>
     <Resource Include="ca.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Tools\TEMPLATE_XML.xml" />
     <Resource Include="Tools\XML_RDP_Example.xml" />
